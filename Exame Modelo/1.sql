@@ -1,11 +1,11 @@
-SELECT distinct hostname, nome
-FROM (SELECT nome, idPessoa, Servidor.idResponsavel, hostname, vulnerabilidade
-		FROM Servidor, Pessoa, Bug
-		WHERE Pessoa.idPessoa = Servidor.idResponsavel
-		AND Bug.vulnerabilidade = 'sim'
-		);
+.mode	columns
+.headers	on
+.nullvalue	NULL
 
-
+SELECT hostname, nome
+FROM Servidor, Pessoa
+WHERE Servidor.vulneravel = "sim"
+AND Pessoa.idPessoa = Servidor.idResponsavel;
 
 
 
