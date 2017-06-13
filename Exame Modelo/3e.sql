@@ -2,15 +2,41 @@
 .headers on
 .nullvalue NULL
 
-CREATE TRIGGER adicionaAplicacao
-BEFORE INSERT ON AplicacaoServidor
-FOR EACH ROW 
-BEGIN
-SELECT CASE
-WHEN (SELECT Aplicacao.idAplicacao 
-FROM Bug, Aplicacao
-WHERE Aplicacao.idAplicacao = Bug.idAplicacao
-AND Bug.vulnerabilidade = "sim")
-THEN Servidor.vulneravel = "sim")
-END
-;
+DROP TRIGGER IF EXISTS vulnerableApp;
+
+CREATE TRIGGER vulnerableApp
+AFTER INSERT ON AplicacaoServidor
+WHEN (SELECT COUNT (*) 
+		FROM Bug, AplicacaoServidor
+		WHERE AplicacaoServidor.idAplicacao = Bug.idAplicacao
+		AND Bug.vulnerabilidade	= "sim"
+		) > 0 
+BEGIN 
+UPDATE Servidor
+SET vulneravel = "sim"
+WHERE Servidor.idServidor = new.idServidor;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
